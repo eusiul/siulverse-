@@ -1,0 +1,41 @@
+---
+// Ensambla todas las secciones pasando el idioma (lang) a cada una.
+import Navbar from './Navbar.astro';
+import Hero from './Hero.astro';
+import Sobre from './Sobre.astro';
+import Logos from './Logos.astro';
+import Trabalhos from './Trabalhos.astro';
+import Servicos from './Servicos.astro';
+import ComoFunciona from './ComoFunciona.astro';
+import BandaSinReuniones from './BandaSinReuniones.astro';
+import Planos from './Planos.astro';
+import Depoimentos from './Depoimentos.astro';
+import BannerCTA from './BannerCTA.astro';
+import Numeros from './Numeros.astro';
+import Faq from './Faq.astro';
+import Footer from './Footer.astro';
+import WhatsAppFloat from './WhatsAppFloat.astro';
+
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+---
+
+<Navbar lang={lang} />
+<main>
+  <Hero lang={lang} />
+  <Sobre lang={lang} />
+  <Logos lang={lang} />
+  <Trabalhos lang={lang} />
+  <Servicos lang={lang} />
+  <ComoFunciona lang={lang} />
+  <BandaSinReuniones lang={lang} />
+  <Planos lang={lang} />
+  <Depoimentos lang={lang} />
+  <BannerCTA lang={lang} />
+  <Numeros lang={lang} />
+  <Faq lang={lang} />
+</main>
+<Footer lang={lang} />
+<WhatsAppFloat lang={lang} />

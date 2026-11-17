@@ -1,0 +1,25 @@
+---
+import { t } from '../i18n/content.js';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const cf = t(lang).comoFunciona;
+---
+
+<section id="como-funciona" class="py-24 md:py-32">
+  <div class="shell" style="--max: 82rem;">
+    <h2 class="font-display text-h-md font-semibold text-porcelain">{cf.titulo}</h2>
+    <div class="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+      {
+        cf.pasos.map((p, i) => (
+          <div class="reveal border-t border-hairline pt-6">
+            <span class="index-num">{`0${i + 1}`}</span>
+            <h3 class="mt-4 font-display text-h-sm font-medium text-porcelain">{p.t}</h3>
+            <p class="mt-3 max-w-prose text-body text-greige">{p.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

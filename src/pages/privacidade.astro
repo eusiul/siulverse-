@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { shared } from '../i18n/content.js';
+const wa = `https://wa.me/${shared.whatsapp}`;
+---
+
+<BaseLayout lang="pt">
+  <main class="shell py-20 md:py-28" style="--max: 46rem;">
+    <a href="/" class="text-label text-greige transition-colors hover:text-porcelain">← Voltar ao site</a>
+
+    <h1 class="mt-8 font-display text-h-md font-semibold text-porcelain">Política de Privacidade e Cookies</h1>
+    <p class="mt-2 text-label text-greige">Última atualização: novembro de 2026</p>
+
+    <div class="mt-10 space-y-8 text-body text-greige">
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">1. Quem é o responsável</h2>
+        <p class="mt-3">A Siulverse é a marca pessoal de Luis Lovera, prestando serviços de design, motion e conteúdo. Para qualquer dúvida sobre seus dados, fale conosco pelo <a href={wa} target="_blank" rel="noopener" class="text-porcelain underline underline-offset-4">WhatsApp</a> ou pelo formulário de contato do site.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">2. Quais dados coletamos</h2>
+        <p class="mt-3"><strong class="text-porcelain">Formulário de contato:</strong> nome, e-mail e a mensagem que você escreve, para podermos responder.<br /><strong class="text-porcelain">Uso do site:</strong> dados agregados de navegação (páginas vistas, origem da visita) pelo Google Analytics 4 — apenas se você aceitar os cookies.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">3. Cookies</h2>
+        <p class="mt-3">Usamos cookies de análise (Google Analytics 4) <strong class="text-porcelain">somente após o seu consentimento</strong> no aviso que aparece na primeira visita. Se você recusar, o site funciona igual e nenhum cookie de análise é instalado. Para mudar sua escolha, limpe os dados do site no seu navegador e o aviso aparecerá de novo.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">4. Finalidade e base legal</h2>
+        <p class="mt-3">Usamos seus dados para responder ao seu contato e para entender o uso do site e melhorá-lo. A base legal é o <strong class="text-porcelain">seu consentimento</strong> (LGPD, art. 7º).</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">5. Com quem compartilhamos</h2>
+        <p class="mt-3">O envio do formulário é processado pelo serviço <strong class="text-porcelain">Web3Forms</strong>, que encaminha a mensagem ao nosso e-mail. A análise de uso é feita pelo <strong class="text-porcelain">Google Analytics</strong>. Não vendemos nem alugamos seus dados a terceiros.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">6. Por quanto tempo guardamos</h2>
+        <p class="mt-3">Guardamos sua mensagem pelo tempo necessário para responder e dar andamento ao contato. Os dados de análise seguem os prazos padrão do Google Analytics.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">7. Seus direitos</h2>
+        <p class="mt-3">Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento. É só falar conosco pelo <a href={wa} target="_blank" rel="noopener" class="text-porcelain underline underline-offset-4">WhatsApp</a> ou pelo formulário.</p>
+      </section>
+
+      <section>
+        <h2 class="font-display text-h-sm font-medium text-porcelain">8. Alterações</h2>
+        <p class="mt-3">Podemos atualizar esta política. A data no topo indica a versão vigente.</p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

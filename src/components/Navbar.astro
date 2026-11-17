@@ -1,0 +1,108 @@
+---
+import { shared, t } from '../i18n/content.js';
+import LangSwitcher from './LangSwitcher.astro';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+const ui = c.ui;
+const waHref = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(c.whatsappMsg)}`;
+---
+
+<header id="site-header" class="fixed inset-x-0 top-0 z-50 transition-colors duration-300">
+  <nav class="shell flex items-center justify-between py-5" aria-label={ui.navCta} style="--max: 84rem;">
+    <!-- Logo -->
+    <a href="#inicio" class="flex items-center gap-2.5 text-porcelain" aria-label={shared.nome}>
+      <img src={shared.logoImg} alt="" aria-hidden="true" width="36" height="36" class="h-9 w-9 object-contain" />
+      <span class="font-display text-lg font-semibold tracking-tight">{shared.nome}</span>
+    </a>
+
+    <!-- Links con número en superíndice (desktop) -->
+    <ul class="hidden items-center gap-8 lg:flex">
+      {
+        c.nav.map((item) => (
+          <li>
+            <a href={item.href} class="group relative text-body text-porcelain/90 transition-colors duration-300 hover:text-porcelain">
+              {item.label}
+              <sup class="ml-0.5 font-mono text-[0.6em] font-normal text-porcelain/50">{item.num}</sup>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Idioma + acción (desktop) -->
+    <div class="hidden items-center gap-5 lg:flex">
+      <div class="flex flex-col items-center gap-1.5">
+        <span class="font-mono text-mono uppercase tracking-[0.18em] text-porcelain">{ui.langLabel}</span>
+        <LangSwitcher lang={lang} />
+      </div>
+      <a href={waHref} target="_blank" rel="noopener" class="btn-primary !py-2 !px-5 text-label">{ui.navCta}</a>
+    </div>
+
+    <!-- Botón menú (móvil) -->
+    <button
+      id="menu-btn"
+      class="text-porcelain lg:hidden"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      aria-label={ui.menuAbrir}
+      data-label-open={ui.menuAbrir}
+      data-label-close={ui.menuFechar}
+    >
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Menú móvil -->
+  <div id="menu-mobile" class="hidden border-t border-hairline bg-onyx lg:hidden">
+    <ul class="shell flex flex-col py-4">
+      {
+        c.nav.map((item) => (
+          <li>
+            <a href={item.href} class="flex items-baseline gap-2 py-3 text-h-sm font-display text-porcelain" data-close>
+              <span class="index-num">{item.num}</span>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="flex items-center justify-between pt-4">
+        <LangSwitcher lang={lang} />
+        <a href={waHref} target="_blank" rel="noopener" class="btn-primary !py-2 !px-5 text-label" data-close>{ui.navCta}</a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header');
+  const onScroll = () => {
+    if (!header) return;
+    const solid = window.scrollY > 40;
+    header.classList.toggle('bg-onyx/90', solid);
+    header.classList.toggle('backdrop-blur-sm', solid);
+    header.classList.toggle('border-b', solid);
+    header.classList.toggle('border-hairline', solid);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const btn = document.getElementById('menu-btn');
+  const menu = document.getElementById('menu-mobile');
+  if (btn && menu) {
+    const setOpen = (open) => {
+      menu.classList.toggle('hidden', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? btn.dataset.labelClose : btn.dataset.labelOpen);
+    };
+    btn.addEventListener('click', () => setOpen(menu.classList.contains('hidden')));
+    menu.querySelectorAll('[data-close]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  }
+</script>

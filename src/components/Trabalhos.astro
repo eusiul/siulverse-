@@ -1,0 +1,63 @@
+---
+import { shared, t } from '../i18n/content.js';
+import TrabalhoCard from './TrabalhoCard.astro';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+const ui = c.ui;
+const tr = c.trabalhos;
+const img = shared.trabalhosImg;
+const link = shared.trabalhosLink;
+const behance = 'https://www.behance.net/eusiul89';
+---
+
+<section id="portfolio" class="py-24 md:py-32">
+  <div class="shell" style="--max: 52rem;">
+    <div class="flex items-end justify-between gap-6">
+      <h2 class="font-display text-h-md font-semibold text-porcelain">
+        {ui.trabalhosTitle}<br /><span class="text-greige">{ui.trabalhosYears}</span>
+      </h2>
+      <a href={behance} target="_blank" rel="noopener" class="hidden shrink-0 items-center gap-2 text-label text-greige hover:text-porcelain md:inline-flex">
+        {ui.verTodos} <span class="index-num">(04)</span>
+      </a>
+    </div>
+
+    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-12">
+      <!-- Fila 1 — izquierda: Slompo (horizontal) + CTA que llena el hueco -->
+      <div class="flex flex-col gap-6 md:col-span-7">
+        <TrabalhoCard nome={tr[0].nome} categoria={tr[0].categoria} img={img[0]} link={link[0]} ratio="aspect-[16/10]" />
+        <a
+          href={behance}
+          target="_blank"
+          rel="noopener"
+          class="group/cta flex flex-1 flex-col items-start justify-center gap-3 border border-hairline bg-surface p-6 transition-colors duration-300 hover:border-ember hover:bg-ember"
+        >
+          <span class="font-display text-h-sm font-medium leading-tight text-porcelain">{ui.portfolioCta}</span>
+          <span class="inline-flex items-center gap-2 text-label text-greige transition-colors group-hover/cta:text-porcelain">
+            Behance
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="transition-transform duration-300 ease-emph group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5">
+              <path d="M7 17L17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" />
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <!-- Fila 1 — derecha: Reel with AI (vertical, alta) -->
+      <div class="md:col-span-5">
+        <TrabalhoCard nome={tr[1].nome} categoria={tr[1].categoria} img={img[1]} link={link[1]} ratio="aspect-[4/5]" />
+      </div>
+
+      <!-- Fila 2 — izquierda: Influencer AI (vertical) -->
+      <div class="md:col-span-5">
+        <TrabalhoCard nome={tr[2].nome} categoria={tr[2].categoria} img={img[2]} link={link[2]} ratio="aspect-[4/5]" />
+      </div>
+
+      <!-- Fila 2 — derecha: Hyssop Beauty (horizontal) -->
+      <div class="md:col-span-7">
+        <TrabalhoCard nome={tr[3].nome} categoria={tr[3].categoria} img={img[3]} link={link[3]} ratio="aspect-[16/10]" />
+      </div>
+    </div>
+  </div>
+</section>

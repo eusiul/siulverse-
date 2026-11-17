@@ -1,0 +1,121 @@
+---
+import { shared, t } from '../i18n/content.js';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+const ui = c.ui;
+const heroImg = shared.heroImg;
+---
+
+<section id="inicio" class="relative overflow-hidden bg-onyx">
+  <!-- H1 con keyword para SEO (oculto visualmente; el titular visual es el <p>) -->
+  <h1 class="sr-only">{c.seoH1}</h1>
+
+  <!-- Fondo con efecto de agua (ripple). La librería fuerza position:relative en
+       este div, así que necesita tamaño propio (h-[100svh]). Reemplazá
+       /public/img/hero.png por tu foto. -->
+  <div
+    data-hero-ripple
+    data-src={heroImg}
+    aria-hidden="true"
+    class="relative z-0 h-[100svh] w-full"
+    style={`background-image:url('${heroImg}'); background-size:cover; background-position:center;`}
+  >
+  </div>
+
+  <!-- Scrim para legibilidad (no bloquea el cursor) -->
+  <div
+    class="pointer-events-none absolute inset-0 z-[1]"
+    style="background:
+      linear-gradient(90deg, rgba(10,13,10,.78) 0%, rgba(10,13,10,.35) 45%, rgba(10,13,10,.15) 100%),
+      linear-gradient(0deg, rgba(10,13,10,.85) 0%, rgba(10,13,10,0) 42%);"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Contenido: el contenedor deja pasar el cursor; solo los textos lo capturan -->
+  <div class="pointer-events-none absolute inset-0 z-10 flex flex-col">
+    <div class="shell flex flex-1 items-center" style="--max: 84rem;">
+      <div class="pointer-events-auto w-full max-w-md pt-24">
+        <p class="text-2xl font-semibold leading-tight text-porcelain sm:text-3xl md:text-[2rem]">
+          {ui.heroH1}
+        </p>
+        <p class="mt-3 max-w-sm text-sm leading-snug text-greige sm:text-base">
+          {ui.heroH2}
+        </p>
+
+        <div class="mt-10 max-w-[18rem]">
+          <a
+            href="#planos"
+            class="group flex items-center justify-between gap-6 border-b border-porcelain/35 pb-3 text-body text-porcelain transition-colors duration-300 hover:border-porcelain"
+          >
+            <span>{ui.heroCta}</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="transition-transform duration-300 ease-emph group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <path d="M7 17L17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" />
+            </svg>
+          </a>
+
+          <div class="mt-5 space-y-1.5 text-label text-greige">
+            {
+              ui.heroServicos.map((s, i) => (
+                <p>{i === 0 && <span class="font-mono text-mono text-greige/80">01 /</span>} {s}</p>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shell relative z-10" style="--max: 84rem;">
+      <span class="pointer-events-auto inline-block font-mono text-mono text-porcelain/70">2026</span>
+    </div>
+
+    <div class="relative z-10 overflow-hidden">
+      <div class="shell" style="--max: 96rem;">
+        <span
+          data-monument
+          aria-hidden="true"
+          class="pointer-events-auto block origin-bottom-left select-none whitespace-nowrap font-display text-monument font-semibold uppercase leading-[0.78] tracking-tight text-porcelain"
+          style="will-change: transform; margin-bottom: -0.08em;"
+        >
+          {shared.nome}
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { Ripples } from '@figliolia/ripples';
+
+  function initHeroRipple() {
+    const el = document.querySelector('[data-hero-ripple]');
+    if (!el || el.dataset.rippleInit) return;
+    el.dataset.rippleInit = 'true';
+    try {
+      const ripples = new Ripples(el, {
+        imageUrl: el.dataset.src,
+        resolution: 512,
+        dropRadius: 22, // tamaño del "chapoteo"
+        perturbance: 0.034, // intensidad de la distorsión
+        interactive: true, // el cursor genera las ondas; se calman solas
+      });
+      if ('ResizeObserver' in window) {
+        const ro = new ResizeObserver(() => {
+          ripples.updateSize?.();
+          ripples.resize?.();
+        });
+        ro.observe(el);
+      }
+    } catch (e) {
+      // Sin WebGL/float: queda la imagen estática de fondo como fallback
+      console.warn('[hero ripple] efecto de agua no disponible:', e);
+    }
+  }
+
+  if (document.readyState === 'complete') initHeroRipple();
+  else window.addEventListener('load', initHeroRipple);
+  document.addEventListener('astro:page-load', initHeroRipple);
+</script>

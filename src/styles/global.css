@@ -1,0 +1,123 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   ESTILOS GLOBALES — Siulverse
+   Base mínima sobre Tailwind. Las fuentes se cargan con <link> en BaseLayout.
+   ─────────────────────────────────────────────────────────────────────────── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark; /* la marca es un sitio oscuro (onyx) */
+    --gutter: clamp(1.25rem, 0.5rem + 3vw, 2.5rem); /* márgenes externos iguales */
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden; /* ningún elemento que sangre debe generar scroll lateral */
+    scroll-padding-top: 5rem; /* compensa la navbar fija al saltar a #anclas */
+  }
+
+  /* Nota: antes había un bloque que apagaba TODAS las animaciones cuando el
+     sistema tiene "reducir movimiento". Se quitó para que la marquesina y los
+     efectos se vean siempre, según lo pedido. */
+
+  body {
+    @apply bg-onyx text-porcelain font-sans antialiased;
+    font-size: 17px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden; /* evita scroll horizontal por elementos que cruzan el borde */
+  }
+
+  /* Foco visible y consistente en todo lo interactivo (accesibilidad) */
+  :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+    outline: 2px solid theme('colors.ember');
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: theme('colors.ember');
+    color: theme('colors.porcelain');
+  }
+
+  /* Tipografía display con kerning óptico para los tamaños enormes */
+  .font-display {
+    font-kerning: normal;
+    font-feature-settings: 'kern' 1;
+  }
+}
+
+@layer components {
+  /* Frame del sitio: un único par de márgenes externos iguales en toda la página */
+  .shell {
+    width: 100%;
+    max-width: var(--max, 78rem);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  /* Botón primario (acción) — rojo, texto porcelain, esquinas rectas */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-sans font-semibold;
+    @apply px-6 py-3 text-body duration-300 ease-emph;
+    transition-property: transform, background-color, border-color, color;
+    min-height: 48px; /* objetivo táctil ≥ 44px */
+  }
+  .btn-primary {
+    @apply btn bg-ember text-porcelain;
+  }
+  .btn-primary:hover {
+    @apply -translate-y-0.5 bg-ember/90;
+  }
+  .btn-ghost {
+    @apply btn border border-porcelain/25 text-porcelain;
+  }
+  .btn-ghost:hover {
+    @apply border-porcelain/60 bg-porcelain/5;
+  }
+
+  /* Índice numérico (01, 02…) — único uso de mono, intencional */
+  .index-num {
+    @apply font-mono text-mono text-bronze;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Entrada de secciones controlada por JS (ver base.js / main script).
+     Si el JS no corre, el contenido queda visible igual (progresivo). */
+  .reveal {
+    opacity: 1;
+  }
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  html.js .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.7s theme('transitionTimingFunction.emph'),
+      transform 0.7s theme('transitionTimingFunction.emph');
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.js .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* Borde giratorio (glow) del plan destacado — solo la animación */
+@keyframes border-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Las secciones rotan al hacer scroll (story scroll): recortar el desborde
+   horizontal SIN crear un segundo scroll. `clip` (a diferencia de `hidden`) no
+   convierte el otro eje en `auto`, así que el body no se vuelve contenedor de
+   scroll → una sola barra vertical. */
+body {
+  overflow-x: clip;
+}

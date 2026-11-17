@@ -1,0 +1,38 @@
+---
+// Switcher de idioma: PT · ES · EN. Enlaza a /, /es/, /en/.
+import { locales, localeMeta, t } from '../i18n/content.js';
+interface Props {
+  lang: string;
+  class?: string;
+}
+const { lang, class: klass = '' } = Astro.props;
+const ui = t(lang).ui;
+---
+
+<div class={`flex items-center gap-3 ${klass}`} role="group" aria-label={ui.langLabel}>
+  {
+    locales.map((l) => (
+      <a
+        href={localeMeta[l].path}
+        hreflang={localeMeta[l].htmlLang}
+        data-lang-link={l}
+        aria-current={l === lang ? 'true' : undefined}
+        class={`text-label transition-colors duration-300 ${l === lang ? 'text-porcelain underline underline-offset-4' : 'text-greige hover:text-porcelain'}`}
+      >
+        {localeMeta[l].label}
+      </a>
+    ))
+  }
+</div>
+
+<script>
+  // Guarda la elección manual de idioma; manda sobre la detección automática.
+  document.querySelectorAll('[data-lang-link]').forEach((a) => {
+    a.addEventListener('click', () => {
+      try {
+        localStorage.setItem('siulverse-lang', a.getAttribute('data-lang-link'));
+      } catch (e) {}
+    });
+  });
+</script>
+

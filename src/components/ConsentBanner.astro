@@ -1,0 +1,109 @@
+---
+import { shared, t } from '../i18n/content.js';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const ui = t(lang).ui;
+const ga4Id = shared.ga4Id;
+const metaPixelId = shared.metaPixelId;
+---
+
+<!-- Aviso de cookies (LGPD/GDPR). GA4 no carga ni pone cookies hasta "Aceptar". -->
+<div
+  id="cookie-banner"
+  data-ga={ga4Id}
+  data-pixel={metaPixelId}
+  hidden
+  role="dialog"
+  aria-label="Cookies"
+  class="fixed inset-x-0 bottom-0 z-[80] border-t border-hairline bg-surface/95 backdrop-blur-sm"
+>
+  <div class="shell flex flex-col items-center gap-4 py-4 sm:flex-row sm:justify-between" style="--max: 82rem;">
+    <p class="text-label text-greige">{ui.cookieText}</p>
+    <div class="flex shrink-0 gap-3">
+      <button data-cookie-reject class="btn-ghost !py-2 !px-4 text-label">{ui.cookieReject}</button>
+      <button data-cookie-accept class="btn !py-2 !px-4 bg-ember text-label text-porcelain transition-transform duration-300 ease-emph hover:-translate-y-0.5">
+        {ui.cookieAccept}
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initCookieConsent() {
+    const banner = document.getElementById('cookie-banner');
+    if (!banner || banner.dataset.init) return;
+    banner.dataset.init = '1';
+    const gaId = banner.dataset.ga;
+
+    function loadGA() {
+      if (!gaId || window.__gaLoaded) return;
+      window.__gaLoaded = true;
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', gaId);
+    }
+
+    const pixelId = banner.dataset.pixel;
+    function loadPixel() {
+      if (!pixelId || window.__fbqLoaded) return;
+      window.__fbqLoaded = true;
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', pixelId);
+      window.fbq('track', 'PageView');
+    }
+
+    function loadAnalytics() {
+      loadGA();
+      loadPixel();
+    }
+
+    let consent = null;
+    try {
+      consent = localStorage.getItem('siulverse-consent');
+    } catch (e) {}
+
+    if (consent === 'granted') {
+      loadAnalytics();
+    } else if (consent !== 'denied') {
+      banner.hidden = false; // primera visita: mostrar el aviso
+    }
+
+    const decide = (val) => {
+      try {
+        localStorage.setItem('siulverse-consent', val);
+      } catch (e) {}
+      banner.hidden = true;
+      if (val === 'granted') loadAnalytics();
+    };
+
+    banner.querySelector('[data-cookie-accept]')?.addEventListener('click', () => decide('granted'));
+    banner.querySelector('[data-cookie-reject]')?.addEventListener('click', () => decide('denied'));
+  }
+
+  initCookieConsent();
+  document.addEventListener('astro:page-load', initCookieConsent);
+</script>

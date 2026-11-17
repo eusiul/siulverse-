@@ -1,0 +1,181 @@
+---
+import '../styles/global.css';
+import { shared, locales, localeMeta, t } from '../i18n/content.js';
+import ConsentBanner from '../components/ConsentBanner.astro';
+
+interface Props {
+  lang?: string;
+}
+const { lang = 'pt' } = Astro.props;
+const c = t(lang);
+const meta = localeMeta[lang] || localeMeta.pt;
+
+const title = `${shared.nome} — ${c.titleSuffix}`;
+const description = c.descricao;
+const image = '/og-image.jpg';
+
+const base = Astro.site ?? new URL('https://siulverse.com');
+const canonical = new URL(meta.path, base);
+
+// ── Schema.org JSON-LD (Organization/ProfessionalService + WebSite + Offers + FAQPage) ──
+const planPrice = (p) => Number((p.preco || '').replace(/[^0-9]/g, '')) || undefined;
+const planCur = (p) => ((p.preco || '').trim().charAt(0) === 'R' ? 'BRL' : 'USD');
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['Organization', 'ProfessionalService'],
+      '@id': base.origin + '/#org',
+      name: shared.nome,
+      url: base.origin + '/',
+      logo: new URL(shared.logoImg, base).href,
+      image: new URL(image, base).href,
+      description: c.descricao,
+      slogan: shared.tagline,
+      sameAs: shared.social.map((s) => s.href),
+      areaServed: ['BR', 'Latin America'],
+      availableLanguage: locales.map((l) => localeMeta[l].htmlLang),
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: c.ui.planosTitle,
+        itemListElement: c.planos.map((p) => ({
+          '@type': 'Offer',
+          name: p.nome,
+          description: p.para,
+          price: planPrice(p),
+          priceCurrency: planCur(p),
+          url: canonical.href + '#planos',
+          priceSpecification: {
+            '@type': 'UnitPriceSpecification',
+            price: planPrice(p),
+            priceCurrency: planCur(p),
+            referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' },
+          },
+        })),
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': base.origin + '/#website',
+      name: shared.nome,
+      url: canonical.href,
+      inLanguage: meta.htmlLang,
+      publisher: { '@id': base.origin + '/#org' },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': canonical.href + '#faq',
+      inLanguage: meta.htmlLang,
+      mainEntity: c.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={meta.htmlLang} class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Detección de idioma del dispositivo (navigator.language).
+         Solo actúa en la raíz "/" y en la 1ª visita; respeta la elección manual
+         (localStorage) y no toca los enlaces directos a /es/ o /en/.
+         Corre antes de pintar para evitar parpadeo. -->
+    <script is:inline>
+      (function () {
+        try {
+          var p = location.pathname;
+          if (p !== '/' && p !== '/index.html') return; // solo autodetecta/redirige desde la home raíz
+          var saved = localStorage.getItem('siulverse-lang');
+          if (saved === 'es') return location.replace('/es/');
+          if (saved === 'en') return location.replace('/en/');
+          if (saved === 'pt') return;
+          if (localStorage.getItem('siulverse-autodetect') === 'done') return; // detectar 1 sola vez
+          localStorage.setItem('siulverse-autodetect', 'done');
+          var langs = navigator.languages || [navigator.language || 'en'];
+          var hit = null;
+          for (var i = 0; i < langs.length; i++) {
+            var l = (langs[i] || '').slice(0, 2).toLowerCase();
+            if (l === 'es' || l === 'en' || l === 'pt') { hit = l; break; }
+          }
+          if (hit === null) hit = 'en'; // idioma no soportado (fr, de, it…) → inglés por defecto
+          if (hit === 'es') location.replace('/es/');
+          else if (hit === 'en') location.replace('/en/');
+          // hit === 'pt' → se queda en "/"
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Alternativas por idioma (hreflang) -->
+    {locales.map((l) => (
+      <link rel="alternate" hreflang={localeMeta[l].htmlLang} href={new URL(localeMeta[l].path, base)} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', base)} />
+
+    <!-- OpenGraph / redes -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, base)} />
+    <meta property="og:locale" content={meta.htmlLang.replace('-', '_')} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, base)} />
+
+    <meta name="theme-color" content="#0A0D0A" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/img/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+    <!-- Datos estructurados (schema.org JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+    <!-- Fuentes: Clash Display (Fontshare) + Fraunces, Inter, Geist Mono (Google Fonts) -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- GA4 ya no carga aquí: lo carga el banner de cookies SOLO tras el consentimiento (LGPD). -->
+    <script is:inline>
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+
+  <body>
+    <a
+      href="#inicio"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ember focus:px-4 focus:py-2 focus:font-semibold focus:text-porcelain"
+      >{c.ui.skip}</a
+    >
+
+    <slot />
+
+    <ConsentBanner lang={lang} />
+
+    <script>
+      import { initMotion } from '../scripts/motion.js';
+      import { initTracking } from '../scripts/track.js';
+      initMotion();
+      initTracking();
+    </script>
+  </body>
+</html>

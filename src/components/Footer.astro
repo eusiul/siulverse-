@@ -1,0 +1,368 @@
+---
+import { shared, t } from '../i18n/content.js';
+import SocialIcons from './SocialIcons.astro';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+const ui = c.ui;
+const waHref = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(c.whatsappMsg)}`;
+const privacyHref = lang === 'es' ? '/es/privacidad/' : lang === 'en' ? '/en/privacy/' : '/privacidade/';
+---
+
+<footer id="contato" class="border-t border-hairline pt-24 md:pt-32">
+  <div class="shell" style="--max: 82rem;">
+    <div class="grid gap-10 md:grid-cols-12 md:items-start md:gap-10">
+      <!-- Trabajemos juntos = título -->
+      <div class="md:col-span-5">
+        <h2 class="font-display text-h-lg font-semibold text-porcelain">{ui.footerCtaTitle}</h2>
+        <p class="mt-4 max-w-prose text-body text-greige">{ui.contatoIntro}</p>
+      </div>
+
+      <!-- Formularios: todo el ancho (izq→der), borde superior alineado con el título -->
+      <div class="md:col-span-7">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <!-- WhatsApp -->
+          <div class="flex flex-col border border-hairline bg-surface p-5">
+            <h3 class="text-body font-display font-medium text-porcelain">{ui.waBoxTitle}</h3>
+            <p class="mt-2 flex-1 text-label text-greige">{ui.waBoxText}</p>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener"
+              class="btn mt-4 w-full justify-center !py-2.5 !px-4 text-label bg-ember text-porcelain transition-transform duration-300 ease-emph hover:-translate-y-0.5"
+            >
+              {ui.waBoxBtn}
+            </a>
+          </div>
+
+          <!-- Formularios con pestañas: Auditoría gratis / Contacto -->
+          <div class="border border-hairline bg-surface p-5">
+            <!-- Pestañas -->
+            <div class="mb-4 grid grid-cols-2 gap-2" role="tablist">
+              <button type="button" data-tab="audit" role="tab" aria-selected="true"
+                class="border border-hairline bg-transparent px-3 py-2 text-center text-label text-greige transition-colors aria-selected:border-ember aria-selected:bg-ember aria-selected:text-porcelain">
+                {ui.tabAudit}
+              </button>
+              <button type="button" data-tab="contact" role="tab" aria-selected="false"
+                class="border border-hairline bg-transparent px-3 py-2 text-center text-label text-greige transition-colors aria-selected:border-ember aria-selected:bg-ember aria-selected:text-porcelain">
+                {ui.tabContact}
+              </button>
+            </div>
+
+            <!-- Panel: Auditoría gratis -->
+            <div data-panel="audit">
+              <p class="mb-3 text-label text-greige">{ui.auditText}</p>
+              <form
+                id="audit-form"
+                class="space-y-3"
+                novalidate
+                data-endpoint="https://api.web3forms.com/submit"
+                data-erro={ui.formErro}
+                data-faltan={ui.formFaltan}
+                data-email-invalido={ui.formEmailInvalido}
+              >
+                <input type="hidden" name="access_key" value={shared.web3formsKey} />
+                <input type="hidden" name="subject" value="Nueva AUDITORÍA GRATIS solicitada — siulverse.com" />
+                <input type="hidden" name="from_name" value="Siulverse — Auditoría" />
+                <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+                <div>
+                  <label for="au-email" class="sr-only">{ui.formEmailLabel}</label>
+                  <input id="au-email" name="email" type="email" required data-label={ui.formEmailLabel} placeholder={ui.formEmailPh} autocomplete="email"
+                    class="w-full border border-hairline bg-onyx px-3.5 py-2.5 text-label text-porcelain outline-none transition-colors placeholder:text-greige/50 focus:border-ember" />
+                </div>
+                <div>
+                  <label for="au-ig" class="sr-only">{ui.auditIgLabel}</label>
+                  <input id="au-ig" name="instagram" type="text" required data-label={ui.auditIgLabel} placeholder={ui.auditIgPh}
+                    class="w-full border border-hairline bg-onyx px-3.5 py-2.5 text-label text-porcelain outline-none transition-colors placeholder:text-greige/50 focus:border-ember" />
+                </div>
+
+                <p id="audit-error" hidden class="text-label text-ember">{ui.formErro}</p>
+
+                <button id="audit-submit" type="submit" data-idle={ui.auditBtn} data-sending={ui.formEnviando}
+                  class="btn w-full justify-center !py-2.5 !px-4 text-label bg-ember text-porcelain transition-transform duration-300 ease-emph hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
+                  {ui.auditBtn}
+                </button>
+              </form>
+              <div id="audit-success" class="hidden flex-col items-start">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-ember/10 text-ember" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <h3 class="mt-3 text-body font-display font-medium text-porcelain">{ui.auditOkTitle}</h3>
+                <p class="mt-1.5 text-label text-greige">{ui.auditOkText}</p>
+              </div>
+            </div>
+
+            <!-- Panel: Contacto -->
+            <div data-panel="contact" class="hidden">
+              <form
+                id="contact-form"
+                class="space-y-3"
+                novalidate
+                data-endpoint="https://api.web3forms.com/submit"
+                data-erro={ui.formErro}
+                data-faltan={ui.formFaltan}
+                data-email-invalido={ui.formEmailInvalido}
+              >
+                <input type="hidden" name="access_key" value={shared.web3formsKey} />
+                <input type="hidden" name="subject" value={`Nuevo mensaje desde siulverse.com (${ui.contatoKicker})`} />
+                <input type="hidden" name="from_name" value="Siulverse — Web" />
+                <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+                <div>
+                  <label for="cf-nome" class="sr-only">{ui.formNomeLabel}</label>
+                  <input id="cf-nome" name="name" type="text" required data-label={ui.formNomeLabel} placeholder={ui.formNomePh} autocomplete="name"
+                    class="w-full border border-hairline bg-onyx px-3.5 py-2.5 text-label text-porcelain outline-none transition-colors placeholder:text-greige/50 focus:border-ember" />
+                </div>
+                <div>
+                  <label for="cf-email" class="sr-only">{ui.formEmailLabel}</label>
+                  <input id="cf-email" name="email" type="email" required data-label={ui.formEmailLabel} placeholder={ui.formEmailPh} autocomplete="email"
+                    class="w-full border border-hairline bg-onyx px-3.5 py-2.5 text-label text-porcelain outline-none transition-colors placeholder:text-greige/50 focus:border-ember" />
+                </div>
+                <div>
+                  <label for="cf-msg" class="sr-only">{ui.formMsgLabel}</label>
+                  <textarea id="cf-msg" name="message" required rows="3" data-label={ui.formMsgLabel} placeholder={ui.formMsgPh}
+                    class="w-full resize-y border border-hairline bg-onyx px-3.5 py-2.5 text-label text-porcelain outline-none transition-colors placeholder:text-greige/50 focus:border-ember"></textarea>
+                </div>
+
+                <p id="contact-error" hidden class="text-label text-ember">{ui.formErro}</p>
+
+                <button id="contact-submit" type="submit" data-idle={ui.formEnviar} data-sending={ui.formEnviando}
+                  class="btn w-full justify-center !py-2.5 !px-4 text-label bg-ember text-porcelain transition-transform duration-300 ease-emph hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60">
+                  {ui.formEnviar}
+                </button>
+              </form>
+              <div id="contact-success" class="hidden flex-col items-start">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-ember/10 text-ember" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <h3 class="mt-3 text-body font-display font-medium text-porcelain">{ui.formOkTitle}</h3>
+                <p class="mt-1.5 text-label text-greige">{ui.formOkText}</p>
+                <button id="contact-reset" type="button" class="btn-ghost mt-4 !py-2 !px-4 text-label">{ui.formOutra}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Redes (fila propia, ancho completo) -->
+    <div class="mt-12">
+      <p class="text-label text-greige">{ui.redesTitle}</p>
+      <SocialIcons class="mt-4" />
+    </div>
+  </div>
+
+  <!-- Wordmark grande -->
+  <div class="mt-16 overflow-hidden">
+    <div class="shell" style="--max: 90rem;">
+      <span data-footer-mark aria-hidden="true" class="block origin-bottom select-none font-display text-monument font-semibold leading-[0.8] text-porcelain" style="margin-bottom: -0.1em;">
+        {shared.nome}
+      </span>
+    </div>
+  </div>
+
+  <!-- Legal: copyright en 1 línea a la izquierda (desktop), "voltar ao topo" centrado -->
+  <div class="border-t border-hairline">
+    <div class="shell flex flex-col items-center gap-3 pt-6 pb-24 text-center sm:flex-row sm:text-left" style="--max: 82rem;">
+      <p class="text-mono text-greige sm:flex-1 sm:whitespace-nowrap">© 2026, {shared.nome}. {ui.direitos}</p>
+      <a href="#inicio" class="group inline-flex items-center gap-1.5 text-mono text-greige transition-colors hover:text-porcelain sm:flex-1 sm:justify-center">
+        {ui.voltarTopo}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" class="transition-transform duration-300 group-hover:-translate-y-0.5"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+      </a>
+      <a href={privacyHref} target="_blank" rel="noopener" class="text-mono text-greige transition-colors hover:text-porcelain sm:flex-1 sm:text-right">{ui.privacidad}</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form || form.dataset.init) return;
+    form.dataset.init = '1';
+
+    const btn = document.getElementById('contact-submit');
+    const errorEl = document.getElementById('contact-error');
+    const successEl = document.getElementById('contact-success');
+    const resetBtn = document.getElementById('contact-reset');
+    const idle = btn.dataset.idle;
+    const sending = btn.dataset.sending;
+    const fields = ['cf-nome', 'cf-email', 'cf-msg'].map((id) => document.getElementById(id));
+    const invalidCls = ['border-ember'];
+
+    const showError = (msg) => {
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+    };
+
+    // Al escribir, limpia el resaltado de ese campo.
+    fields.forEach((f) =>
+      f.addEventListener('input', () => {
+        f.classList.remove(...invalidCls);
+      })
+    );
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.botcheck && form.botcheck.checked) return; // honeypot anti-spam
+
+      // ── Validación: indica EXACTAMENTE qué campo obligatorio falta ──
+      const missing = [];
+      fields.forEach((f) => {
+        f.classList.remove(...invalidCls);
+        if (!f.value.trim()) {
+          missing.push(f.dataset.label);
+          f.classList.add(...invalidCls);
+        }
+      });
+      const emailEl = document.getElementById('cf-email');
+      const emailBad = emailEl.value.trim() && !emailEl.checkValidity();
+      if (emailBad) emailEl.classList.add(...invalidCls);
+
+      if (missing.length || emailBad) {
+        let msg = '';
+        if (missing.length) msg = form.dataset.faltan + ' ' + missing.join(', ') + '.';
+        if (emailBad) msg = (msg ? msg + ' ' : '') + form.dataset.emailInvalido;
+        showError(msg);
+        (missing.length ? fields.find((f) => !f.value.trim()) : emailEl).focus();
+        return;
+      }
+
+      errorEl.hidden = true;
+      btn.disabled = true;
+      btn.textContent = sending;
+      try {
+        const res = await fetch(form.dataset.endpoint, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success === true || data.success === 'true')) {
+          form.hidden = true;
+          successEl.classList.remove('hidden');
+          successEl.classList.add('flex');
+          form.reset();
+          if (window.siulTrack) window.siulTrack('generate_lead', { method: 'contact_form' });
+        } else {
+          throw new Error(data.message || 'send failed');
+        }
+      } catch (_) {
+        showError(form.dataset.erro);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = idle;
+      }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      successEl.classList.add('hidden');
+      successEl.classList.remove('flex');
+      form.hidden = false;
+      document.getElementById('cf-nome')?.focus();
+    });
+  }
+
+  function initAuditForm() {
+    const form = document.getElementById('audit-form');
+    if (!form || form.dataset.init) return;
+    form.dataset.init = '1';
+
+    const btn = document.getElementById('audit-submit');
+    const errorEl = document.getElementById('audit-error');
+    const successEl = document.getElementById('audit-success');
+    const idle = btn.dataset.idle;
+    const sending = btn.dataset.sending;
+    const emailEl = document.getElementById('au-email');
+    const igEl = document.getElementById('au-ig');
+    const required = [emailEl, igEl];
+    const invalidCls = ['border-ember'];
+
+    const showError = (msg) => {
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+    };
+
+    required.forEach((f) =>
+      f.addEventListener('input', () => f.classList.remove(...invalidCls))
+    );
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.botcheck && form.botcheck.checked) return;
+
+      const missing = [];
+      required.forEach((f) => {
+        f.classList.remove(...invalidCls);
+        if (!f.value.trim()) {
+          missing.push(f.dataset.label);
+          f.classList.add(...invalidCls);
+        }
+      });
+      const emailBad = emailEl.value.trim() && !emailEl.checkValidity();
+      if (emailBad) emailEl.classList.add(...invalidCls);
+
+      if (missing.length || emailBad) {
+        let msg = '';
+        if (missing.length) msg = form.dataset.faltan + ' ' + missing.join(', ') + '.';
+        if (emailBad) msg = (msg ? msg + ' ' : '') + form.dataset.emailInvalido;
+        showError(msg);
+        (missing.length ? required.find((f) => !f.value.trim()) : emailEl).focus();
+        return;
+      }
+
+      errorEl.hidden = true;
+      btn.disabled = true;
+      btn.textContent = sending;
+      try {
+        const res = await fetch(form.dataset.endpoint, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && (data.success === true || data.success === 'true')) {
+          form.hidden = true;
+          successEl.classList.remove('hidden');
+          successEl.classList.add('flex');
+          form.reset();
+          if (window.siulTrack) window.siulTrack('generate_lead', { method: 'audit' });
+        } else {
+          throw new Error(data.message || 'send failed');
+        }
+      } catch (_) {
+        showError(form.dataset.erro);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = idle;
+      }
+    });
+  }
+
+  function initFooterTabs() {
+    const tabs = Array.from(document.querySelectorAll('[data-tab]'));
+    if (!tabs.length) return;
+    const panels = Array.from(document.querySelectorAll('[data-panel]'));
+    tabs.forEach((btn) => {
+      if (btn.dataset.tabInit) return;
+      btn.dataset.tabInit = '1';
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.tab;
+        tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === key)));
+        panels.forEach((p) => p.classList.toggle('hidden', p.dataset.panel !== key));
+      });
+    });
+  }
+
+  function initFooter() {
+    initContactForm();
+    initAuditForm();
+    initFooterTabs();
+  }
+
+  initFooter();
+  document.addEventListener('astro:page-load', initFooter);
+</script>

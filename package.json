@@ -1,0 +1,20 @@
+{
+  "name": "siulverse",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Sitio web del estudio creativo Siulverse (Luis Lovera). Astro + Tailwind, salida estática.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.2",
+    "@figliolia/ripples": "^1.0.8",
+    "astro": "^4.16.0",
+    "gsap": "^3.12.5",
+    "tailwindcss": "^3.4.14"
+  }
+}

@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Salida de build (EasyPanel la genera con "npm run build")
+dist/
+.astro/
+
+# Tooling / cache
+.taste-skill/
+
+# Documentos de estrategia del negocio (NO van al deploy)
+.agents/
+
+# Skills y herramientas (no son parte del sitio)
+skills/
+SiulverseOs/
+
+# Archivos fuente de diseño / fotos pesadas
+Fotos/
+*.psd
+WhatsApp Image*
+
+# Sistema / editor / secretos
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.vscode/

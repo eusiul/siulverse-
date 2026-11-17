@@ -1,0 +1,29 @@
+---
+interface Props {
+  nome: string;
+  categoria: string;
+  img: string;
+  link: string;
+  ratio: string;
+}
+const { nome, categoria, img, link, ratio } = Astro.props;
+---
+
+<article class="reveal group">
+  <a href={link} target="_blank" rel="noopener" class="block">
+    <div class={`relative w-full overflow-hidden bg-surface ${ratio}`}>
+      <img
+        src={img}
+        alt={`${nome} — ${categoria}`}
+        class="h-full w-full object-cover opacity-0 transition-[transform,opacity] duration-500 ease-emph group-hover:scale-[1.03] data-[loaded]:opacity-100"
+        loading="lazy"
+        onload="this.setAttribute('data-loaded','')"
+        onerror="this.closest('div').innerHTML='<div class=\'flex h-full items-center justify-center text-label text-greige\'>[PLACEHOLDER]</div>'"
+      />
+    </div>
+    <div class="mt-4 flex items-baseline justify-between gap-4">
+      <h3 class="font-display text-body-lg font-medium text-porcelain">{nome}</h3>
+      <p class="shrink-0 text-label text-greige">{categoria}</p>
+    </div>
+  </a>
+</article>

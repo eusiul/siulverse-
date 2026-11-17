@@ -1,0 +1,73 @@
+---
+import { t } from '../i18n/content.js';
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+const c = t(lang);
+const ui = c.ui;
+const depoimentos = c.depoimentos;
+---
+
+<section id="depoimentos" class="py-24 md:py-32" aria-roledescription="carousel" aria-label={ui.depAria}>
+  <div class="shell" style="--max: 82rem;">
+    <div class="relative" data-carousel>
+      <div class="overflow-hidden">
+        <ul class="flex" data-track>
+          {
+            depoimentos.map((d, i) => (
+              <li class="w-full shrink-0 px-0" role="group" aria-roledescription="slide" aria-label={`${i + 1} / ${depoimentos.length}`} data-slide aria-hidden={i === 0 ? 'false' : 'true'}>
+                <figure class="max-w-4xl">
+                  <blockquote class="font-display text-h-md font-medium leading-tight text-porcelain">“{d.cita}”</blockquote>
+                  <figcaption class="mt-8 flex items-baseline gap-3 text-body">
+                    <span class="text-porcelain">{d.nome}</span>
+                    <span class="text-greige">— {d.cargo}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="mt-12 flex items-center justify-between">
+        <div class="flex items-baseline gap-2 font-mono text-label text-greige tabular-nums">
+          <span data-current class="text-porcelain">01</span>
+          <span>/</span>
+          <span>{String(depoimentos.length).padStart(2, '0')}</span>
+        </div>
+        <div class="flex gap-3">
+          <button data-prev class="flex h-12 w-12 items-center justify-center border border-porcelain/25 text-porcelain transition-colors hover:border-porcelain/60 hover:bg-porcelain/5" aria-label={ui.depAnterior}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+          </button>
+          <button data-next class="flex h-12 w-12 items-center justify-center border border-porcelain/25 text-porcelain transition-colors hover:border-porcelain/60 hover:bg-porcelain/5" aria-label={ui.depProximo}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('[data-carousel]').forEach((root) => {
+    const track = root.querySelector('[data-track]');
+    const slides = Array.from(root.querySelectorAll('[data-slide]'));
+    const current = root.querySelector('[data-current]');
+    const total = slides.length;
+    let i = 0;
+    const go = (n) => {
+      i = (n + total) % total;
+      track.style.transform = `translateX(-${i * 100}%)`;
+      track.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
+      current.textContent = String(i + 1).padStart(2, '0');
+      slides.forEach((s, idx) => s.setAttribute('aria-hidden', String(idx !== i)));
+    };
+    root.querySelector('[data-prev]').addEventListener('click', () => go(i - 1));
+    root.querySelector('[data-next]').addEventListener('click', () => go(i + 1));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(i - 1);
+      if (e.key === 'ArrowRight') go(i + 1);
+    });
+  });
+</script>
