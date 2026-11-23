@@ -6,7 +6,8 @@ interface Props {
 const { lang } = Astro.props;
 const c = t(lang);
 const ui = c.ui;
-const waHref = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(c.whatsappMsg)}`;
+const waPlan = (nome) => `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(`${ui.planWaMsg} ${nome}.`)}`;
+const waPersonaliza = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(ui.personalizaWaMsg)}`;
 const waQuote = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(ui.cotizarMsg)}`;
 ---
 
@@ -53,7 +54,7 @@ const waQuote = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(ui.c
               ))}
             </ul>
 
-            <a href={waHref} target="_blank" rel="noopener" class={`mt-6 ${p.destaque ? 'btn-primary' : 'btn-ghost'} w-full !py-2.5 text-label`}>
+            <a href={waPlan(p.nome)} target="_blank" rel="noopener" class={`mt-6 ${p.destaque ? 'btn-primary' : 'btn-ghost'} w-full !py-2.5 text-label`}>
               {p.cta}
             </a>
           </article>
@@ -74,6 +75,12 @@ const waQuote = `https://wa.me/${shared.whatsapp}?text=${encodeURIComponent(ui.c
       {ui.bonus}
     </p>
     <p class="mx-auto mt-2 max-w-4xl text-center text-label text-greige">{ui.cancelNote}</p>
+
+    <!-- Personaliza tu plan (discreto) -->
+    <div class="mx-auto mt-8 flex max-w-xl flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-4">
+      <p class="text-label text-greige">{ui.personalizaText}</p>
+      <a href={waPersonaliza} target="_blank" rel="noopener" class="btn-ghost shrink-0 !py-2 !px-4 text-label">{ui.personalizaCta}</a>
+    </div>
 
     <div class="mt-20 border-t border-hairline pt-14">
       <div class="grid gap-10 md:grid-cols-12 md:gap-8">

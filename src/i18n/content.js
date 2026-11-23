@@ -21,14 +21,12 @@ export const shared = {
   tagline: 'Scale on autopilot. Stay exclusive.',
   // Número en formato internacional, SIN "+" ni espacios (para o link wa.me)
   whatsapp: '554891163084',
-  // Correo al que llegan los mensajes del formulario de contacto
-  contactEmail: 'eusiularevol@gmail.com',
   // Measurement ID de Google Analytics 4 (formato G-XXXXXXXXXX). Pégalo aquí y
   // se activa la analítica + los eventos de conversión. Vacío = desactivado.
   ga4Id: 'G-G3BDKVKNN7',
   metaPixelId: '1169637388834408', // Meta Pixel (carga solo tras consentimiento de cookies)
   // Access key de Web3Forms (https://web3forms.com → pon tu correo → te envían la
-  // key GRATIS). Pégala aquí y el formulario envía los mensajes a contactEmail.
+  // key GRATIS). El correo de destino queda guardado en Web3Forms, no en el código.
   web3formsKey: '72b3561c-a140-4b36-94bf-4528b7c91f60',
   heroImg: '/img/hero.webp',
   logoImg: '/img/logo.webp',
@@ -83,7 +81,7 @@ export const content = {
       heroH1: 'Agência de conteúdo para marcas que já vendem.',
       heroH2: 'Presença semanal no Instagram, TikTok e YouTube — entregas em 7 dias ou o mês é grátis.',
       heroCta: 'Ver os planos',
-      heroServicos: ['Design & Motion', 'UGC com avatar IA', 'Vídeos para anúncios'],
+      heroServicos: ['Design & Motion', 'UGC com avatar IA', 'SaaS Motion'],
       trabalhosTitle: 'Trabalhos selecionados',
       trabalhosYears: '2023 — 2026',
       verTodos: 'Ver todos',
@@ -105,6 +103,10 @@ export const content = {
       auditOkText: 'Te mando sua auditoria expressa em até 48 horas no e-mail que você deixou.',
       planosTitle: 'Planos mensais',
       planosSub: 'Assinatura de criativos. Escolha o ritmo, mande o briefing e receba entregas toda semana.',
+      planWaMsg: 'Oi! Vim do site da Siulverse e tenho interesse no plano',
+      personalizaText: 'Nenhum plano encaixa 100%? Monte o seu sob medida.',
+      personalizaCta: 'Personalizar meu plano',
+      personalizaWaMsg: 'Oi! Vim do site da Siulverse e quero personalizar meu plano.',
       cancelNote: 'Sem fidelidade. Cancele quando quiser.',
       garantia: 'Primeira entrega em 7 dias úteis ou esse mês é por nossa conta.',
       cookieText: 'Usamos cookies para entender como o site é usado e melhorar sua experiência.',
@@ -184,10 +186,10 @@ export const content = {
       { nome: 'Hyssop Beauty', categoria: 'Vídeos para anúncios' },
     ],
     servicos: [
-      { num: '01', nome: 'Design para redes', tag: 'Estático', texto: 'Posts e carrosséis para feed e stories, pensados para parar o scroll e levar ao clique.', destaque: false },
+      { num: '01', nome: 'Conteúdos para redes', tag: 'Estático', texto: 'Posts e carrosséis para feed e stories, pensados para parar o scroll e levar ao clique.', destaque: false },
       { num: '02', nome: 'Reels & Motion', tag: 'Vídeo', texto: 'Reels e vídeos curtos que prendem nos 3 primeiros segundos e ganham alcance.', destaque: false },
       { num: '03', nome: 'UGC com avatar IA', tag: 'Diferencial', texto: 'Vídeo ou imagem de produto para anúncios, feitos por um avatar de IA. Sem contratar creator e sem marcar gravação.', destaque: true },
-      { num: '04', nome: 'Vídeos para anúncios', tag: 'Performance', texto: 'Motion graphics e vídeos para Meta Ads, com hook, CTA e variações para testar.', destaque: false },
+      { num: '04', nome: 'SaaS Motion', tag: 'SaaS', texto: 'Animações de UI e vídeos explicativos para mostrar produtos de software, dashboards e fluxos de app.', destaque: false },
     ],
     comoFunciona: {
       titulo: 'Como funciona',
@@ -241,7 +243,7 @@ export const content = {
       heroH1: 'Agencia de contenido para marcas que ya venden.',
       heroH2: 'Presencia semanal en Instagram, TikTok y YouTube — entregas en 7 días o el mes gratis.',
       heroCta: 'Ver los planes',
-      heroServicos: ['Diseño & Motion', 'UGC con avatar IA', 'Videos para anuncios'],
+      heroServicos: ['Diseño & Motion', 'UGC con avatar IA', 'SaaS Motion'],
       trabalhosTitle: 'Trabajos seleccionados',
       trabalhosYears: '2023 — 2026',
       verTodos: 'Ver todos',
@@ -263,6 +265,10 @@ export const content = {
       auditOkText: 'Te mando tu auditoría exprés en máximo 48 horas al correo que dejaste.',
       planosTitle: 'Planes mensuales',
       planosSub: 'Suscripción de creativos. Elige el ritmo, manda el brief y recibe entregas cada semana.',
+      planWaMsg: '¡Hola! Vengo del sitio de Siulverse y me interesa el plan',
+      personalizaText: '¿Ningún plan encaja 100%? Arma el tuyo a tu medida.',
+      personalizaCta: 'Personalizar mi plan',
+      personalizaWaMsg: '¡Hola! Vengo del sitio de Siulverse y deseo personalizar mi plan.',
       cancelNote: 'Sin permanencia. Cancela cuando quieras.',
       garantia: 'Primera entrega en 7 días hábiles o ese mes corre por nuestra cuenta.',
       cookieText: 'Usamos cookies para entender cómo se usa el sitio y mejorar tu experiencia.',
@@ -342,10 +348,10 @@ export const content = {
       { nome: 'Hyssop Beauty', categoria: 'Videos para anuncios' },
     ],
     servicos: [
-      { num: '01', nome: 'Diseño para redes', tag: 'Estático', texto: 'Posts y carruseles para feed y stories, pensados para frenar el scroll y llevar al clic.', destaque: false },
+      { num: '01', nome: 'Contenidos para redes', tag: 'Estático', texto: 'Posts y carruseles para feed y stories, pensados para frenar el scroll y llevar al clic.', destaque: false },
       { num: '02', nome: 'Reels & Motion', tag: 'Video', texto: 'Reels y videos cortos que enganchan en los primeros 3 segundos y ganan alcance.', destaque: false },
       { num: '03', nome: 'UGC con avatar IA', tag: 'Diferencial', texto: 'Video o imagen de producto para anuncios, hechos por un avatar de IA. Sin contratar creador y sin agendar rodaje.', destaque: true },
-      { num: '04', nome: 'Videos para anuncios', tag: 'Performance', texto: 'Motion graphics y videos para Meta Ads, con hook, CTA y variaciones para testear.', destaque: false },
+      { num: '04', nome: 'SaaS Motion', tag: 'SaaS', texto: 'Animaciones de UI y videos explicativos para mostrar productos de software, dashboards y flujos de app.', destaque: false },
     ],
     comoFunciona: {
       titulo: 'Cómo funciona',
@@ -399,7 +405,7 @@ export const content = {
       heroH1: 'Content agency for brands that already sell.',
       heroH2: 'Weekly presence on Instagram, TikTok and YouTube — delivered in 7 days or the month is free.',
       heroCta: 'See the plans',
-      heroServicos: ['Design & Motion', 'UGC with AI avatar', 'Ad videos'],
+      heroServicos: ['Design & Motion', 'UGC with AI avatar', 'SaaS Motion'],
       trabalhosTitle: 'Selected work',
       trabalhosYears: '2023 — 2026',
       verTodos: 'See all',
@@ -421,6 +427,10 @@ export const content = {
       auditOkText: "I'll send your express audit within 48 hours to the email you provided.",
       planosTitle: 'Monthly plans',
       planosSub: 'A creative subscription. Pick the pace, send the brief, and get deliveries every week.',
+      planWaMsg: "Hi! I came from the Siulverse site and I'm interested in the plan",
+      personalizaText: "No plan fits 100%? Build yours to measure.",
+      personalizaCta: 'Customize my plan',
+      personalizaWaMsg: "Hi! I came from the Siulverse site and I'd like to customize my plan.",
       cancelNote: 'No contracts. Cancel anytime.',
       garantia: 'First delivery in 7 business days or that month is on us.',
       cookieText: 'We use cookies to understand how the site is used and improve your experience.',
@@ -500,10 +510,10 @@ export const content = {
       { nome: 'Hyssop Beauty', categoria: 'Ad videos' },
     ],
     servicos: [
-      { num: '01', nome: 'Social media design', tag: 'Static', texto: 'Posts and carousels for feed and stories, built to stop the scroll and drive the click.', destaque: false },
+      { num: '01', nome: 'Social media content', tag: 'Static', texto: 'Posts and carousels for feed and stories, built to stop the scroll and drive the click.', destaque: false },
       { num: '02', nome: 'Reels & Motion', tag: 'Video', texto: 'Reels and short videos that hook in the first 3 seconds and earn reach.', destaque: false },
       { num: '03', nome: 'UGC with AI avatar', tag: 'Our edge', texto: 'Video or product image for ads, made by an AI avatar. No creator to hire and no shoot to book.', destaque: true },
-      { num: '04', nome: 'Ad videos', tag: 'Performance', texto: 'Motion graphics and videos for Meta Ads, with a hook, a CTA, and variations to test.', destaque: false },
+      { num: '04', nome: 'SaaS Motion', tag: 'SaaS', texto: 'UI animations and explainer videos designed to showcase software products, dashboards, and app workflows.', destaque: false },
     ],
     comoFunciona: {
       titulo: 'How it works',
